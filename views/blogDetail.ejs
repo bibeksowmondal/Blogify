@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <title><%= blog.title %></title>
+</head>
+
+<body>
+<%- include('./partials/nav') %>
+
+<div class="container mt-5">
+
+  <!-- ================= BLOG IMAGE ================= -->
+  <% if (blog.imageUrl) { %>
+    <img
+      src="<%= blog.imageUrl %>"
+      class="img-fluid rounded mb-4"
+      style="max-height: 420px; width: 100%; object-fit: cover;"
+    />
+  <% } %>
+
+  <!-- ================= BLOG TITLE ================= -->
+  <h1 class="fw-semibold text-white mb-2">
+    <%= blog.title %>
+  </h1>
+
+  <!-- ================= AUTHOR + DATE ================= -->
+  <p class=" mb-4">
+    Published by
+    <strong class="text-light"><%= blog.author.fullname %></strong>
+    · <%= new Date(blog.createdAt).toDateString() %>
+  </p>
+
+  <!-- ================= BLOG CONTENT ================= -->
+  <p class="fs-6 lh-lg text-light">
+    <%= blog.content %>
+  </p>
+
+  <!-- ================= EDIT / DELETE ================= -->
+  <% if (locals.user && locals.user.id === blog.author._id.toString()) { %>
+    <div class="mt-4 mb-5">
+      <a href="/blog/edit/<%= blog._id %>" class="btn btn-warning btn-sm me-2">
+        Edit Blog
+      </a>
+
+      <form
+        action="/blog/delete/<%= blog._id %>"
+        method="POST"
+        class="d-inline"
+        onsubmit="return confirm('Delete this blog?');"
+      >
+        <button class="btn btn-danger btn-sm">
+          Delete Blog
+        </button>
+      </form>
+    </div>
+  <% } %>
+
+  <hr class="border-secondary opacity-25 my-5">
+
+  <!-- ================= COMMENTS ================= -->
+  <h4 class="text-white mb-3">Comments</h4>
+
+  <!-- COMMENT FORM -->
+  <div class="comment-box mb-4">
+    <form
+      action="<%= locals.user ? `/blog/${blog._id}/comment` : '/user/signin' %>"
+      method="POST"
+    >
+      <textarea
+        name="content"
+        class="form-control mb-3 bg-dark text-light border-0"
+        rows="3"
+        placeholder="<%= locals.user ? 'Write a comment...' : 'Sign in to comment...' %>"
+        <%= locals.user ? '' : 'disabled' %>
+        required
+      ></textarea>
+
+      <% if (locals.user) { %>
+        <button class="btn btn-primary btn-sm">
+          Post Comment
+        </button>
+      <% } else { %>
+        <a href="/user/signin" class="btn btn-outline-light btn-sm">
+          Sign in
+        </a>
+      <% } %>
+    </form>
+  </div>
+
+  <!-- NO COMMENTS -->
+  <% if (comments.length === 0) { %>
+    <p class="text-muted">No comments yet.</p>
+  <% } %>
+
+  <!-- ================= COMMENT LIST ================= -->
+  <% comments.forEach(comment => { %>
+
+    <%
+      const userLiked =
+        locals.user && comment.likes.includes(locals.user.id);
+    %>
+
+    <div class="blog-card p-3 mb-3">
+
+      <p class="mb-1 text-light">
+        <%= comment.content %>
+      </p>
+
+      <small class="text-muted">
+        — <strong class="text-light"><%= comment.author.fullname %></strong>
+        · <%= new Date(comment.createdAt).toDateString() %>
+      </small>
+
+      <div class="mt-2 d-flex gap-2">
+
+        <!-- ❤️ AJAX LIKE -->
+        <button
+          type="button"
+          class="btn btn-sm <%= userLiked ? 'btn-primary' : 'btn-outline-primary' %> like-btn"
+          data-comment-id="<%= comment._id %>"
+        >
+          ❤️ <span class="like-count"><%= comment.likes.length %></span>
+        </button>
+
+        <!-- 🗑 DELETE COMMENT -->
+        <% if (locals.user && locals.user.id === comment.author._id.toString()) { %>
+          <form action="/blog/comment/delete/<%= comment._id %>" method="POST">
+            <button class="btn btn-sm btn-outline-danger">
+              Delete
+            </button>
+          </form>
+        <% } %>
+
+      </div>
+
+    </div>
+
+  <% }) %>
+
+</div>
+
+<%- include('./partials/scripts') %>
+
+<!-- ================= AJAX LIKE ================= -->
+<script>
+  document.querySelectorAll('.like-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.dataset.commentId;
+
+      const res = await fetch(`/blog/comment/like/${id}`, {
+        method: 'POST'
+      });
+
+      if (res.redirected) {
+        window.location.href = res.url;
+        return;
+      }
+
+      const data = await res.json();
+
+      btn.querySelector('.like-count').textContent = data.likesCount;
+      btn.classList.toggle('btn-primary', data.liked);
+      btn.classList.toggle('btn-outline-primary', !data.liked);
+    });
+  });
+</script>
+
+</body>
+<footer>
+  <%- include('./partials/footer') %>
+</footer>
+</html>

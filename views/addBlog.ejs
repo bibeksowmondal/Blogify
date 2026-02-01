@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <title>Add Blog</title>
+</head>
+
+<body>
+  <%- include('./partials/nav') %>
+
+  <main class="flex-fill d-flex align-items-center justify-content-center">
+    <div class="container" style="max-width: 600px;">
+
+      <h2 class="text-white text-center mb-4">
+        Add New Blog
+      </h2>
+
+      <div class="comment-box">
+        <form action="/blog/add" method="POST">
+
+          <div class="mb-3">
+            <label class="form-label text-light">Title</label>
+            <input
+              type="text"
+              name="title"
+              class="form-control"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-light">Image URL </label>
+            <input
+              type="url"
+              name="imageUrl"
+              class="form-control"
+              placeholder="https://example.com/image.jpg"
+            />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label text-light">Content</label>
+            <textarea
+              name="content"
+              rows="6"
+              class="form-control"
+              required
+            ></textarea>
+          </div>
+
+          <button class="btn btn-primary w-100">
+            Publish Blog
+          </button>
+
+        </form>
+      </div>
+
+    </div>
+  </main>
+
+  <%- include('./partials/footer') %>
+  <%- include('./partials/scripts') %>
+</body>
+</html>

@@ -1,0 +1,74 @@
+
+
+<% const blogs = locals.blogs || []; %>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <title>Home</title>
+</head>
+
+<body>
+
+<%- include('./partials/nav') %>
+
+<div class="container mt-4">
+  <h2 class="text-white latest-blogs-title mb-4">Latest Blogs</h2>
+
+  <% if (blogs.length === 0) { %>
+    <div class="alert alert-info">
+      No blogs published yet.
+    </div>
+  <% } %>
+
+  <div class="row">
+    <% blogs.forEach(blog => { %>
+
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm blog-card">
+
+          <!-- Blog Image -->
+          <img
+            src="<%= blog.imageUrl || '/images/blog-placeholder.jpg' %>"
+            class="card-img-top"
+            alt="Blog image"
+            style="height: 200px; object-fit: cover;"
+          />
+
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title"><%= blog.title %></h5>
+
+            <p class="text-muted mb-2">
+              Published by
+            <strong><%= blog.author.fullname %></strong>
+            • <%= new Date(blog.createdAt).toDateString() %>
+            </p>
+
+            
+            <p class="text-muted small">
+              💬 <%= blog.commentCount %> comments
+            </p>
+
+
+            <!-- Push button to bottom -->
+            <div class="mt-auto">
+              <a href="/blog/<%= blog._id %>" class="btn btn-outline-primary w-100">
+                Read More
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    <% }) %>
+  </div>
+</div>
+
+<%- include('./partials/scripts') %>
+</body>
+<footer>
+  <%- include('./partials/footer') %>
+</footer>
+</html>

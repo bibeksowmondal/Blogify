@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <%- include('./partials/head') %>
+  <title>Signin</title>
+</head>
+
+<body>
+  <%- include('./partials/nav') %>
+
+  <!-- MAIN CONTENT (IMPORTANT) -->
+  <main class="flex-fill d-flex align-items-center justify-content-center">
+    <div class="container" style="max-width: 420px;">
+      <h2 class="text-white text-center mb-4">
+        Log In To Your Account
+      </h2>
+
+      <!-- ERROR MESSAGE -->
+      <% if (typeof error !== 'undefined') { %>
+        <div class="alert alert-danger">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <form action="/user/signin" method="POST">
+        <div class="mb-3">
+          <label class="form-label text-light">Email address</label>
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label text-light">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            required
+          />
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">
+          Sign In
+        </button>
+      </form>
+    </div>
+  </main>
+
+  <!-- FOOTER MUST BE INSIDE BODY -->
+  <%- include('./partials/footer') %>
+
+  <%- include('./partials/scripts') %>
+</body>
+</html>

@@ -1,0 +1,63 @@
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Blogify</a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavDropdown"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <!-- LEFT MENU -->
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="/">Home</a>
+        </li>
+
+        <% if (locals.user) { %>
+          <!-- Only logged-in users see this -->
+          <li class="nav-item">
+            <a class="nav-link" href="/blog/add">Add Blog</a>
+          </li>
+        <% } %>
+      </ul>
+
+      <!-- RIGHT MENU -->
+      <ul class="navbar-nav ms-auto">
+
+        <% if (!locals.user) { %>
+          <!-- Logged OUT -->
+          <li class="nav-item">
+            <a class="nav-link" href="/user/signup">Signup</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" href="/user/signin">Signin</a>
+          </li>
+        <% } else { %>
+          <!-- Logged IN -->
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              data-bs-toggle="dropdown"
+            >
+              <%= locals.user.fullname %>
+            </a>
+
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li>
+                <a class="dropdown-item" href="/user/logout">Logout</a>
+              </li>
+            </ul>
+          </li>
+        <% } %>
+
+      </ul>
+    </div>
+  </div>
+</nav>
