@@ -5,6 +5,19 @@ const { requireAuth } = require('../services/authentication');
 
 const router = Router();
 
+/* ================= MY BLOGS ================= */
+router.get('/my', requireAuth, async (req, res) => {
+  try {
+    const blogs = await Blog.find({ author: req.user.id })
+      .sort({ createdAt: -1 });
+
+    res.render('myBlogs', { blogs });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Failed to load blogs');
+  }
+});
+
 /* ======================================================
    ADD BLOG
 ====================================================== */

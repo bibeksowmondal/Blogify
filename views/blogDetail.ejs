@@ -36,26 +36,7 @@
     <%= blog.content %>
   </p>
 
-  <!-- ================= EDIT / DELETE ================= -->
-  <% if (locals.user && locals.user.id === blog.author._id.toString()) { %>
-    <div class="mt-4 mb-5">
-      <a href="/blog/edit/<%= blog._id %>" class="btn btn-warning btn-sm me-2">
-        Edit Blog
-      </a>
-
-      <form
-        action="/blog/delete/<%= blog._id %>"
-        method="POST"
-        class="d-inline"
-        onsubmit="return confirm('Delete this blog?');"
-      >
-        <button class="btn btn-danger btn-sm">
-          Delete Blog
-        </button>
-      </form>
-    </div>
-  <% } %>
-
+  <!-- ================= BLOG BORDER ================= -->
   <hr class="border-secondary opacity-25 my-5">
 
   <!-- ================= COMMENTS ================= -->
