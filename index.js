@@ -12,9 +12,12 @@ const Comment = require('./models/comment');
 const app = express();
 
 /* ---------- DB ---------- */
-mongoose.connect('mongodb://localhost:27017/blogify')
+const DB_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017/blogify';
+
+mongoose.connect(DB_URL)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error(err));
+
 
 /* ---------- VIEW ENGINE ---------- */
 app.set('view engine', 'ejs');
