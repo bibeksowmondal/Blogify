@@ -85,17 +85,42 @@ main.flex-fill {
   box-shadow: 0 14px 30px rgba(0, 0, 0, 0.6);
 }
 
-/* =====================================================
-   BLOG IMAGE
-===================================================== */
-.blog-card img {
+/* ================= BLOG DETAIL IMAGE (NO CUT + SHARP) ================= */
+
+.blog-banner {
+  display: block;
+  margin: 0 auto 20px auto;
+
+  width: 100%;
+  max-width: 900px;
+  max-height: 520px;
+
+  object-fit: contain;
+
+  padding: 10px;
+  border-radius: 14px;
+
+  /* background for empty space */
+  background: linear-gradient(180deg, #020617, #0f172a);
+
+  /* quality improvement */
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* ================= CARD IMAGES (HOMEPAGE / MYBLOGS) ================= */
+
+.card-img-top {
   height: 200px;
+  width: 100%;
   object-fit: cover;
-  transition: transform 0.35s ease;
+
+  /* sharper preview images */
+  image-rendering: -webkit-optimize-contrast;
 }
 
 .blog-card:hover img {
-  transform: scale(1.04);
+  transform: scale(1.02);
 }
 
 /* =====================================================

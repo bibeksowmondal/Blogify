@@ -11,13 +11,16 @@
 <div class="container mt-5">
 
   <!-- ================= BLOG IMAGE ================= -->
-  <% if (blog.imageUrl) { %>
-    <img
-      src="<%= blog.imageUrl %>"
-      class="img-fluid rounded mb-4"
-      style="max-height: 420px; width: 100%; object-fit: cover;"
-    />
-  <% } %>
+ <!-- BLOG IMAGE -->
+<% if (blog.imageUrl) { %>
+  <img
+    src="<%= blog.imageUrl %>"
+    alt="Blog image"
+    class="blog-banner mb-4"
+    loading="lazy"
+    onerror="this.onerror=null;this.src='/images/blog-placeholder.jpg';"
+  />
+<% } %>
 
   <!-- ================= BLOG TITLE ================= -->
   <h1 class="fw-semibold text-white mb-2">
