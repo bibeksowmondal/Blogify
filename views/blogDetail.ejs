@@ -5,47 +5,47 @@
   <title><%= blog.title %></title>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
+
 <%- include('./partials/nav') %>
 
+<!-- Main Content Wrapper -->
+<main class="flex-fill">
 <div class="container mt-5">
 
-  <!-- ================= BLOG IMAGE ================= -->
- <!-- BLOG IMAGE -->
-<% if (blog.imageUrl) { %>
-  <img
-    src="<%= blog.imageUrl %>"
-    alt="Blog image"
-    class="blog-banner mb-4"
-    loading="lazy"
-    onerror="this.onerror=null;this.src='/images/blog-placeholder.jpg';"
-  />
-<% } %>
+  <!-- BLOG IMAGE -->
+  <% if (blog.imageUrl) { %>
+    <img
+      src="<%= blog.imageUrl %>"
+      alt="Blog image"
+      class="blog-banner mb-4"
+      loading="lazy"
+      onerror="this.onerror=null;this.src='/images/blog-placeholder.jpg';"
+    />
+  <% } %>
 
-  <!-- ================= BLOG TITLE ================= -->
+  <!-- BLOG TITLE -->
   <h1 class="fw-semibold text-white mb-2">
     <%= blog.title %>
   </h1>
 
-  <!-- ================= AUTHOR + DATE ================= -->
-  <p class=" mb-4">
+  <!-- AUTHOR + DATE -->
+  <p class="mb-4">
     Published by
     <strong class="text-light"><%= blog.author.fullname %></strong>
     · <%= new Date(blog.createdAt).toDateString() %>
   </p>
 
-  <!-- ================= BLOG CONTENT ================= -->
+  <!-- BLOG CONTENT -->
   <p class="fs-6 lh-lg text-light">
     <%= blog.content %>
   </p>
 
-  <!-- ================= BLOG BORDER ================= -->
   <hr class="border-secondary opacity-25 my-5">
 
-  <!-- ================= COMMENTS ================= -->
+  <!-- COMMENTS -->
   <h4 class="text-white mb-3">Comments</h4>
 
-  <!-- COMMENT FORM -->
   <div class="comment-box mb-4">
     <form
       action="<%= locals.user ? `/blog/${blog._id}/comment` : '/user/signin' %>"
@@ -72,18 +72,14 @@
     </form>
   </div>
 
-  <!-- NO COMMENTS -->
   <% if (comments.length === 0) { %>
     <p class="text-muted">No comments yet.</p>
   <% } %>
 
-  <!-- ================= COMMENT LIST ================= -->
-  <% comments.forEach(comment => { %>
-
-    <%
-      const userLiked =
-        locals.user && comment.likes.includes(locals.user.id);
-    %>
+  <% comments.forEach(comment => { 
+    const userLiked =
+      locals.user && comment.likes.includes(locals.user.id);
+  %>
 
     <div class="blog-card p-3 mb-3">
 
@@ -98,7 +94,6 @@
 
       <div class="mt-2 d-flex gap-2">
 
-        <!-- ❤️ AJAX LIKE -->
         <button
           type="button"
           class="btn btn-sm <%= userLiked ? 'btn-primary' : 'btn-outline-primary' %> like-btn"
@@ -107,7 +102,6 @@
           ❤️ <span class="like-count"><%= comment.likes.length %></span>
         </button>
 
-        <!-- 🗑 DELETE COMMENT -->
         <% if (locals.user && locals.user.id === comment.author._id.toString()) { %>
           <form action="/blog/comment/delete/<%= comment._id %>" method="POST">
             <button class="btn btn-sm btn-outline-danger">
@@ -123,10 +117,13 @@
   <% }) %>
 
 </div>
+</main>
+
+<!-- Footer MUST be inside body -->
+<%- include('./partials/footer') %>
 
 <%- include('./partials/scripts') %>
 
-<!-- ================= AJAX LIKE ================= -->
 <script>
   document.querySelectorAll('.like-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
@@ -149,8 +146,6 @@
     });
   });
 </script>
-<footer>
-  <%- include('./partials/footer') %>
-</footer>
+
 </body>
 </html>
