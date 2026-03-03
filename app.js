@@ -14,9 +14,18 @@ const app = express();
 /* ---------- DB ---------- */
 const DB_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017/blogify';
 
-mongoose.connect(DB_URL)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error(err));
+mongoose.connect(DB_URI)
+  .then(() => {
+    console.log("MongoDB Connected ✅");
+
+    app.listen(process.env.PORT || 3000, () => {
+      console.log("Server Started 🚀");
+    });
+
+  })
+  .catch(err => {
+    console.error("MongoDB Connection Error ❌", err);
+  });
 
 
 /* ---------- VIEW ENGINE ---------- */
@@ -60,4 +69,6 @@ app.get('/', async (req, res) => {
 });
 
 
-app.listen(8000, () => console.log('Server running on 8000'));
+
+
+
