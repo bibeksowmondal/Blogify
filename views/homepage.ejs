@@ -1,5 +1,3 @@
-
-
 <% const blogs = locals.blogs || []; %>
 
 <!DOCTYPE html>
@@ -9,11 +7,14 @@
   <title>Home</title>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
 
 <%- include('./partials/nav') %>
 
+<!-- Main Content -->
+<main class="flex-fill">
 <div class="container mt-4">
+
   <h2 class="text-white latest-blogs-title mb-4">Latest Blogs</h2>
 
   <% if (blogs.length === 0) { %>
@@ -28,7 +29,6 @@
       <div class="col-md-4 mb-4">
         <div class="card h-100 shadow-sm blog-card">
 
-          <!-- Blog Image -->
           <img
             src="<%= blog.imageUrl || '/images/blog-placeholder.jpg' %>"
             class="card-img-top"
@@ -41,17 +41,14 @@
 
             <p class="text-muted mb-2">
               Published by
-            <strong><%= blog.author.fullname %></strong>
-            • <%= new Date(blog.createdAt).toDateString() %>
+              <strong><%= blog.author.fullname %></strong>
+              • <%= new Date(blog.createdAt).toDateString() %>
             </p>
 
-            
             <p class="text-muted small">
               💬 <%= blog.commentCount %> comments
             </p>
 
-
-            <!-- Push button to bottom -->
             <div class="mt-auto">
               <a href="/blog/<%= blog._id %>" class="btn btn-outline-primary w-100">
                 Read More
@@ -64,12 +61,14 @@
 
     <% }) %>
   </div>
+
 </div>
-<footer>
-  <%- include('./partials/footer') %>
-</footer>
+</main>
+
+<!-- Include footer directly (NO extra <footer> wrapper) -->
+<%- include('./partials/footer') %>
 
 <%- include('./partials/scripts') %>
-</body>
 
+</body>
 </html>

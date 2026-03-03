@@ -5,9 +5,12 @@
   <title>My Blogs</title>
 </head>
 
-<body>
+<body class="d-flex flex-column min-vh-100">
+
 <%- include('./partials/nav') %>
 
+<!-- Main Content Wrapper -->
+<main class="flex-fill">
 <div class="container mt-5">
 
   <h2 class="text-white mb-4">My Blogs</h2>
@@ -71,8 +74,12 @@
   </div>
 
 </div>
+</main>
 
+<!-- Footer -->
 <%- include('./partials/footer') %>
+
 <%- include('./partials/scripts') %>
+
 </body>
 </html>
