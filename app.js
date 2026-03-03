@@ -14,7 +14,7 @@ const app = express();
 /* ---------- DB ---------- */
 const DB_URL = process.env.MONGODB_URI || 'mongodb://localhost:27017/blogify';
 
-mongoose.connect(DB_URI)
+mongoose.connect(DB_URL)
   .then(() => {
     console.log("MongoDB Connected ✅");
 
