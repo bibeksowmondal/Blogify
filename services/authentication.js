@@ -15,6 +15,7 @@ function createToken(user) {
   return jwt.sign(
     {
       id: user._id,
+      fullname: user.fullname,
       role: user.role
     },
     JWT_SECRET,

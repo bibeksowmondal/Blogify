@@ -1,3 +1,5 @@
+<% const comments = locals.comments || []; %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,7 +11,6 @@
 
 <%- include('./partials/nav') %>
 
-<!-- Main Content Wrapper -->
 <main class="flex-fill">
 <div class="container mt-5">
 
@@ -32,7 +33,9 @@
   <!-- AUTHOR + DATE -->
   <p class="mb-4">
     Published by
-    <strong class="text-light"><%= blog.author.fullname %></strong>
+    <strong class="text-light">
+      <%= blog.author?.fullname || "Unknown" %>
+    </strong>
     · <%= new Date(blog.createdAt).toDateString() %>
   </p>
 
@@ -46,11 +49,14 @@
   <!-- COMMENTS -->
   <h4 class="text-white mb-3">Comments</h4>
 
+  <!-- COMMENT FORM -->
   <div class="comment-box mb-4">
+
     <form
       action="<%= locals.user ? `/blog/${blog._id}/comment` : '/user/signin' %>"
       method="POST"
     >
+
       <textarea
         name="content"
         class="form-control mb-3 bg-dark text-light border-0"
@@ -61,73 +67,100 @@
       ></textarea>
 
       <% if (locals.user) { %>
+
         <button class="btn btn-primary btn-sm">
           Post Comment
         </button>
+
       <% } else { %>
+
         <a href="/user/signin" class="btn btn-outline-light btn-sm">
           Sign in
         </a>
+
       <% } %>
+
     </form>
+
   </div>
 
+  <!-- NO COMMENTS -->
   <% if (comments.length === 0) { %>
     <p class="text-muted">No comments yet.</p>
   <% } %>
 
+  <!-- COMMENT LIST -->
   <% comments.forEach(comment => { 
+
     const userLiked =
-      locals.user && comment.likes.includes(locals.user.id);
+      locals.user &&
+      comment.likes &&
+      comment.likes.includes(locals.user.id);
+
   %>
 
-    <div class="blog-card p-3 mb-3">
+  <div class="blog-card p-3 mb-3">
 
-      <p class="mb-1 text-light">
-        <%= comment.content %>
-      </p>
+    <p class="mb-1 text-light">
+      <%= comment.content %>
+    </p>
 
-      <small class="text-muted">
-        — <strong class="text-light"><%= comment.author.fullname %></strong>
-        · <%= new Date(comment.createdAt).toDateString() %>
-      </small>
+    <small class="text-muted">
+      — <strong class="text-light">
+        <%= comment.author?.fullname || "User" %>
+      </strong>
+      · <%= new Date(comment.createdAt).toDateString() %>
+    </small>
 
-      <div class="mt-2 d-flex gap-2">
+    <div class="mt-2 d-flex gap-2">
 
-        <button
-          type="button"
-          class="btn btn-sm <%= userLiked ? 'btn-primary' : 'btn-outline-primary' %> like-btn"
-          data-comment-id="<%= comment._id %>"
-        >
-          ❤️ <span class="like-count"><%= comment.likes.length %></span>
-        </button>
+      <!-- LIKE BUTTON -->
+      <button
+        type="button"
+        class="btn btn-sm <%= userLiked ? 'btn-primary' : 'btn-outline-primary' %> like-btn"
+        data-comment-id="<%= comment._id %>"
+      >
+        ❤️ <span class="like-count">
+          <%= comment.likes ? comment.likes.length : 0 %>
+        </span>
+      </button>
 
-        <% if (locals.user && locals.user.id === comment.author._id.toString()) { %>
-          <form action="/blog/comment/delete/<%= comment._id %>" method="POST">
-            <button class="btn btn-sm btn-outline-danger">
-              Delete
-            </button>
-          </form>
-        <% } %>
+      <!-- DELETE BUTTON -->
+      <% if (locals.user && locals.user.id === comment.author?._id?.toString()) { %>
 
-      </div>
+        <form action="/blog/comment/delete/<%= comment._id %>" method="POST">
+
+          <button class="btn btn-sm btn-outline-danger">
+            Delete
+          </button>
+
+        </form>
+
+      <% } %>
 
     </div>
+
+  </div>
 
   <% }) %>
 
 </div>
 </main>
 
-<!-- Footer MUST be inside body -->
+<!-- FOOTER -->
 <%- include('./partials/footer') %>
 
 <%- include('./partials/scripts') %>
 
 <script>
-  document.querySelectorAll('.like-btn').forEach(btn => {
-    btn.addEventListener('click', async () => {
-      const id = btn.dataset.commentId;
+
+document.querySelectorAll('.like-btn').forEach(btn => {
+
+  btn.addEventListener('click', async () => {
+
+    const id = btn.dataset.commentId;
+
+    try {
 
       const res = await fetch(`/blog/comment/like/${id}`, {
         method: 'POST'
@@ -141,10 +174,18 @@
       const data = await res.json();
 
       btn.querySelector('.like-count').textContent = data.likesCount;
+
       btn.classList.toggle('btn-primary', data.liked);
       btn.classList.toggle('btn-outline-primary', !data.liked);
-    });
+
+    } catch (err) {
+      console.error("Like error:", err);
+    }
+
   });
+
+});
+
 </script>
 
 </body>

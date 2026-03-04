@@ -10,7 +10,7 @@ const commentSchema = new Schema(
 
     author: {
       type: Schema.Types.ObjectId,
-      ref: 'user',
+      ref: 'User',
       required: true
     },
 
@@ -30,7 +30,7 @@ const commentSchema = new Schema(
     // Likes
     likes: [{
       type: Schema.Types.ObjectId,
-      ref: 'user'
+      ref: 'User'
     }]
   },
   { timestamps: true }
